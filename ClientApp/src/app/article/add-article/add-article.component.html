@@ -1,0 +1,155 @@
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Добавление рецензии</h1>
+        <div *ngIf="showError" class="alert alert-danger" role="alert">
+            {{errorMessage}}
+        </div>
+        <!--<form [formGroup]="addArticleForm" autocomplete="off">-->
+        <form [formGroup]="addArticleForm" class="example-form">
+            <mat-form-field class="example-full-width" >
+                <mat-label fo>Продукт</mat-label>
+                <input
+                    type="text"
+                    [formControl]="productFormControl"
+                    placeholder="Продукт"
+                    matInput
+                    [matAutocomplete]="autoProduct"
+                    (click)="selectionMade(products, 'Product')"
+                    (change)="changed()">
+                <mat-autocomplete 
+                    id="productsInput"
+                    autoActiveFirstOption
+                    #autoProduct="matAutocomplete"
+                    [displayWith]="displayProperty.bind(this)"
+                    (optionSelected)="optionSelected($event.option.value)">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option.name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="productFormControl.hasError('required')">
+                    Выберите <strong>Продукт</strong>
+                </mat-error>
+            </mat-form-field>
+            <div *ngIf="isNewProduct && selectedProduct">
+                <mat-form-field>
+                    <mat-label>Группа</mat-label>                          
+                    <mat-select [formControl]="groupFormControl" (selectionChange)="changeGroup($event)">
+                        <mat-option *ngFor="let group of groups" [value]="group">
+                            {{group.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="groupFormControl.hasError('required')">
+                        Выберите <strong>Группу</strong>
+                    </mat-error> 
+                </mat-form-field>      
+                <div *ngIf="selectedGroup">
+                    <mat-form-field>
+                        <mat-label>Категория</mat-label> 
+                        <mat-select (selectionChange)="changeCategory($event)" [formControl]="categoryFormControl">
+                            <mat-option *ngFor="let ag of selectedGroup.atributesGroups" [value]="ag">
+                                {{ag.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="categoryFormControl.hasError('required')">
+                            Выберите <strong>Категорию</strong>
+                        </mat-error> 
+                    </mat-form-field>
+                </div>
+                <div *ngIf="selectedCategory">
+                    <div *ngFor="let atr of selectedCategory.atributes; index as i">
+                        <mat-form-field>
+                            <mat-label>{{atr.name}}</mat-label> 
+                            <input 
+                                type="text"
+                                [formControl]="getAtrControlAt(i)"
+                                placeholder={{atr.name}}
+                                aria-label="Number"
+                                matInput
+                                [matAutocomplete]="autoAtributeValue"
+                                (click)="selectionMade(atr.AtributeValues, 'AtributeValue')"
+                                (change)="changed()">
+                            <mat-autocomplete id={{atr.name}} autoActiveFirstOption #autoAtributeValue="matAutocomplete" 
+                                [displayWith]="displayProperty.bind(this)"
+                                (optionActivated)="optionActivated($event.option.value)"
+                                (optionSelected)="optionSelected($event.option.value)">
+                                    <mat-option *ngFor="let option of filteredOptions" [value]="option">
+                                        {{option.value}}
+                                    </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="isAtrControlAtHasError(i,'required')">
+                                Введите <strong>{{atr.name}}</strong>
+                            </mat-error>
+                        </mat-form-field>  
+                        </div>
+                    </div>
+                    <mat-form-field class="example-full-width" >
+                        <mat-label fo>Производитель</mat-label>
+                        <input
+                            type="text"
+                            [formControl]="producerFormControl"
+                            placeholder="Производитель"
+                            aria-label="Number"
+                            matInput
+                            [matAutocomplete]="autoProducer"
+                            (click)="selectionMade(producers, 'Producer')"
+                            (change)="changed()">
+                        <mat-autocomplete id="producerInput"
+                            autoActiveFirstOption #autoProducer="matAutocomplete"
+                            [displayWith]="displayProperty.bind(this)"
+                            (optionSelected)="optionSelected($event.option.value)">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                {{option.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="producerFormControl.hasError('required')">
+                            Выберите <strong>производителя</strong>
+                        </mat-error> 
+                    </mat-form-field>                    
+                    <mat-form-field class="example-full-width" >
+                        <mat-label fo>Страна производителя</mat-label>
+                        <input
+                            type="text"
+                            [formControl]="countryFormControl"
+                            placeholder="Страна производителя"
+                            aria-label="Number"
+                            matInput
+                            [matAutocomplete]="autoCountry"
+                            (click)="selectionMade(countries, 'Country')"
+                            (change)="changed()">
+                        <mat-autocomplete id="countryInput"
+                            autoActiveFirstOption #autoCountry="matAutocomplete"
+                            [displayWith]="displayProperty.bind(this)"
+                            (optionSelected)="optionSelected($event.option.value)">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                {{option.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="countryFormControl.hasError('required')">
+                            Выберите <strong>Страну производителя</strong>
+                        </mat-error> 
+                    </mat-form-field>
+                </div>
+                    <mat-label>Оценка</mat-label> 
+                    <div>
+                            <ul matInput class="list-inline rating-list" *ngFor="let star of stars; let i= index" style="display: inline-block"> 
+                                <li (click)="countStar(star)" id="{{'starId'+i}}" [ngClass]="{'selected': (star <= selectedRate)}" 
+                                    (mouseenter)="addStar(star)" (mouseleave)="removeStar(star)"> ★
+                                </li>
+                            </ul>
+                            <mat-error *ngIf="selectedRate<=0">
+                                Поставьте <strong>Оценку</strong>
+                            </mat-error>
+                    </div> 
+                <mat-form-field class="example-full-width" >
+                    <mat-label>Отзыв</mat-label> 
+                    <textarea class="form-control" matInput></textarea>
+                </mat-form-field>
+                <br>
+                <div>
+                    <div>
+                        <button type="submit" class="btn btn-info" [disabled]="!isValid()">Добавить</button>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>

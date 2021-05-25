@@ -1,0 +1,59 @@
+<p><a routerLink="/" class="nav-link">К списку групп</a></p>
+  <div *ngIf="editGroup; else editORCreateCategory">
+    <ng-container *ngIf="!newGroup">
+      <h2>Изменение группы</h2>
+    </ng-container>
+    <ng-container *ngIf="newGroup">
+      <h2>Добавление группы</h2>
+    </ng-container>
+    <label>Имя</label>
+    <input type="text" [(ngModel)]="groupType.name" class="form-control" />
+    <table class="table table-striped">
+      <label>Категории</label>
+      <tr *ngFor="let ag of groupType.atributesGroups">
+        <td>{{ag?.name}}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" (click)="startEditAtributeGroup(ag)">Изменить</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteAtributeGroup(ag)">Удалить</button>
+        </td>
+    </tr>
+    </table>
+    <button class="btn btn-sm btn-primary" (click)="startEditAtributeGroup(atributesGroup)">Добавить категорию</button>
+    <div class="form-group">
+      <input type="button" value="Сохранить" (click)="saveGroup()" class="btn btn-success" />
+  </div>
+</div>
+
+<!--шаблон для редактирования Категории<-->
+<ng-template #editORCreateCategory>
+  <label>Имя</label>
+  <input type="text" [(ngModel)]="editableAtributesGroup.name" class="form-control" />
+  
+  <table class="table table-striped">
+    <label>Атрибуты</label>
+      <tr *ngFor="let atr of editableAtributesGroup.atributes">
+        <ng-template [ngIf]="atribute?.name != atr.name" [ngIfElse]="editAtributeTemplate">
+          <td>{{atr?.name}}</td>
+          <td>
+            <button class="btn btn-sm btn-primary" (click)="editAtribute(atr)">Изменить</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteAtribute(atr)">Удалить</button>
+          </td>
+        </ng-template>
+      </tr>
+      <input type="text" [(ngModel)]="newAtributeName" class="form-control" />
+      <input type="button" class="btn btn-success"  value="Добавить" (click)="addAtribute()"/>
+  </table>
+  <input type="button" class="btn btn-success"  value="Готово" (click)="saveAtributesGroup()"/>
+  <input type="button" value="Отмена" (click)="cancelAtributesGroup()" class="btn btn-sm btn-warning" />
+</ng-template>
+
+
+<ng-template #editAtributeTemplate>
+  <td>
+    <input type="text" [(ngModel)]="changeAtributeName" class="form-control" />
+  </td>
+  <td>
+    <input type="button" value="Сохранить" (click)="saveAtribute()" class="btn btn-sm btn-success" />
+    <input type="button" value="Отмена" (click)="cancelAtribute()" class="btn btn-sm btn-warning" />
+  </td>
+</ng-template>

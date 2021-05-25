@@ -1,0 +1,32 @@
+
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand mb-0 h1" [routerLink]="['/']">Reviewton</a>
+    <button class="navbar-toggler" type="button" (click)="isExpanded = !isExpanded" [attr.aria-expanded]="!isExpanded" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" [ngbCollapse]="isExpanded" id="navbarToggleExternalContent">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/']">Поиск</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/article/add']">Добавить</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <ul *ngIf='!isUserAuthenticated' class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link"[routerLink]="['/authentication/login']">Вход</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"[routerLink]="['/authentication/register']">Регестрация</a>
+          </li>
+        </ul>
+        <ul *ngIf='isUserAuthenticated' class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <button class="btn btn-link" style="color: #00000080;" (click)="logout()">Выйти</button>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </nav>

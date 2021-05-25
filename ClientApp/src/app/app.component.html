@@ -1,0 +1,79 @@
+<app-nav-menu></app-nav-menu>
+<div class="container body-content">
+  <router-outlet></router-outlet>
+</div>
+<!--
+<app-nav-menu></app-nav-menu>
+<h1>Список групп товаров</h1>
+<input type="button" value="Добавить" class="btn btn-default" (click)="add()" />
+<table *ngIf="tableMode; else createGroupType" class="table table-striped">
+  <thead>
+    <tr>
+      <td>id</td>
+      <td>Имя</td>
+      <td>Количество категорий</td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of groupTypes">
+      <ng-template [ngIf]="groupType?.idGroupType != p.idGroupType" [ngIfElse]="editGroupType">
+        <td>{{p?.idGroupType}}</td>
+        <td>{{p?.name}}</td>
+        <td>{{p?.atributesGroups.length}}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" (click)="editProduct(p)">Изменить</button>
+          <button class="btn btn-sm btn-danger" (click)="delete(p)">Удалить</button>
+        </td>
+      </ng-template>
+    </tr>
+  </tbody>
+</table>
+-->
+<!--шаблон для редактирования
+<ng-template #editGroupType>
+  <td>
+    {{groupType.idGroupType}}
+  </td>
+  <td>
+    <input type="text" [(ngModel)]="groupType.name" class="form-control" />
+  </td>
+
+  <td>
+    <tr *ngFor="let ag of groupType.atributesGroups">
+        <td>{{ag?.idAtrbutesGroup}}</td>
+        <td>{{ag?.name}}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" (click)="editAtributeGroup(ag)">Изменить</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteAtributeGroup(ag)">Удалить</button>
+        </td>
+    </tr>
+  </td>
+  <td>
+    <input type="button" value="Сохранить" (click)="save()" class="btn btn-sm btn-success" />
+    <input type="button" value="Отмена" (click)="cancel()" class="btn btn-sm btn-warning" />
+  </td>
+</ng-template>
+-->
+<!--шаблон для добавления
+<ng-template #createGroupType>
+  <div class="form-group">
+    <label>Модель</label>
+    <input type="text" [(ngModel)]="groupType.name" class="form-control" />
+    <label>Категории</label>
+    <tr *ngFor="let ag of groupType.atributesGroups">
+      <td>{{ag?.idAtrbutesGroup}}</td>
+      <td>{{ag?.name}}</td>
+      <td>
+        <button class="btn btn-sm btn-primary" (click)="editAtributeGroup()">Изменить</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteAtributeGroup()">Удалить</button>
+      </td>
+    </tr>
+    <input type="text" [(ngModel)]="newAtributeGroupName" class="form-control" />
+    <input type="button" class="btn btn-success"  value="Добавить" (click)="addAtributeGroup()"/>
+  </div>
+  <div>
+    <input type="button" value="Сохранить" (click)="save()" class="btn btn-success" />
+    <input type="button" value="Отмена" (click)="cancel()" class="btn btn-warning" />
+  </div>
+</ng-template>-->

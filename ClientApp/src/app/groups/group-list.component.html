@@ -1,0 +1,17 @@
+<h1>Список групп товаров</h1>
+<div *ngIf='isAdmin'>
+  <a routerLink="/group" class="nav-link">Добавить</a>
+</div>
+<div>
+    <tr *ngFor="let p of groupTypes">
+        <ng-template [ngIf]="groupType?.idGroupType != p.idGroupType" [ngIfElse]="editGroupType">
+          <td>
+            <a class="nav-link">{{p?.name}}</a>
+          </td>
+          <td *ngIf='isAdmin'>
+            <button (click)="change(p)" class="btn btn-sm btn-primary">Изменить</button>
+            <button (click)="delete(p)" class="btn btn-sm btn-danger">Удалить</button>
+          </td>
+        </ng-template>
+    </tr>
+</div>

@@ -1,0 +1,138 @@
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Добавление рецензии</h1>
+        <div *ngIf="showError" class="alert alert-danger" role="alert">
+            {{errorMessage}}
+        </div>
+        <!--<form [formGroup]="addArticleForm" autocomplete="off">-->
+        <form class="example-form">
+        <mat-form-field class="example-full-width" >
+            <div class="form-group row">
+                <mat-label class="col-form-label col-sm-2">Продукт:</mat-label>
+                <div class="col-md-5">
+                    <input class="form-control" 
+                            type="text"
+                             placeholder="Продукт"
+                             aria-label="Number"
+                             matInput
+                             [formControl]="matControl"
+                             [matAutocomplete]="autoProduct"
+                             (click)="selectionMade(products, 'Product')">
+                      <mat-autocomplete id="productsInput"
+                        autoActiveFirstOption #autoProduct="matAutocomplete"
+                        [displayWith]="displayProperty.bind(this)"
+                        (optionActivated)="optionActivated($event.option.value)"
+                        (optionSelected)="optionSelected($event.option.value)">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                          {{option.name}}
+                        </mat-option>
+                      </mat-autocomplete>
+                </div>       
+            </div>
+            <div *ngIf="isNewProduct">
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2">Группа:</label>                
+                    <div class="col-md-5">                            
+                        <mat-select>
+                            <mat-option *ngFor="let group of groups" [value]="group">
+                                {{group.name}}
+                            </mat-option>
+                          </mat-select>                        
+                        <!--<select class="form-control" (change)="changeGroup($event)" formControlName="selectG" ngModel>
+                            <option value="" disabled>Выберите группу</option>
+                            <option *ngFor="let group of groups" [ngValue]="group">{{group.name}}</option>
+                        </select>-->
+                    </div>                
+                </div>
+                <div class="form-group row" *ngIf="selectedGroup">
+                    <label class="col-form-label col-sm-2">Категория:</label> 
+                    <div class="col-md-5">                        
+                        <mat-select>
+                            <mat-option *ngFor="let ag of selectedGroup.atributesGroups" [value]="ag">
+                                {{ag.name}}
+                            </mat-option>
+                          </mat-select>  
+                        <!--<select class="form-control" (change)="changeCategory($event)" formControlName="selectC" ngModel>
+                            <option value="" disabled>Выберите категорию</option>
+                            <option *ngFor="let ag of selectedGroup.atributesGroups" [ngValue]="ag">{{ag.name}}</option>
+                        </select>-->
+                    </div>
+                </div>
+                <div *ngIf="selectedCategory">
+                    <div class="form-group row" *ngFor="let atr of selectedCategory.atributes">
+                        <label class="col-form-label col-sm-2">{{atr.name}}:</label> 
+                        <div class="col-md-5">       
+                            <input class="form-control" 
+                                type="text"
+                                 placeholder={{atr.name}}
+                                 aria-label="Number"
+                                 matInput
+                                 [formControl]="matControl"
+                                 [matAutocomplete]="autoAtributeValue"
+                                 (click)="selectionMade(atr.AtributeValues, 'AtributeValue')">
+                          <mat-autocomplete id="0" autoActiveFirstOption #autoAtributeValue="matAutocomplete" 
+                            [displayWith]="displayProperty.bind(this)"
+                            (optionActivated)="optionActivated($event.option.value)"
+                            (optionSelected)="optionSelected($event.option.value)">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                              {{option.value}}
+                            </mat-option>
+                          </mat-autocomplete>
+                            
+                        </div>                     
+                    </div>
+                </div>
+            </div>
+                <!--
+            <div>
+                    <mat-label>test</mat-label>
+                      <input class="form-control" 
+                            type="text"
+                             placeholder="Pick one"
+                             aria-label="Number"
+                             matInput
+                             [formControl]="matControl"
+                             [matAutocomplete]="auto"
+                             (click)="selectionMade(test2)">
+                      <mat-autocomplete id="0" autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayProperty">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                          {{option.value}}
+                        </mat-option>
+                      </mat-autocomplete>
+            </div>
+
+            
+            <div>
+                <mat-label>test2</mat-label>
+                <input class="form-control" 
+                      type="text"
+                       placeholder="Pick one"
+                       aria-label="Number"
+                       matInput
+                       [formControl]="matControl"
+                       [matAutocomplete]="auto"
+                       (click)="selectionMade(test)">
+                <mat-autocomplete id="1" autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayProperty">
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option.value}}
+                  </mat-option>
+                </mat-autocomplete>
+            </div>
+                -->
+            
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2">Отзыв:</label> 
+                <textarea class="form-control">
+
+                </textarea>
+            </div>
+            <br>
+            <div class="form-group row">
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-info" [disabled]="!addArticleForm.valid">Добавить</button>
+                </div>
+            </div>
+        </mat-form-field>
+        </form>
+    </div>
+</div>
