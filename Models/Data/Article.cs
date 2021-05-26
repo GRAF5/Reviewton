@@ -14,5 +14,10 @@ namespace ProductsReviewsAngular.Models
         public virtual User User { get; set; }
         public DateTime time {get;set;}
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public override string ToString()
+        {
+            return "id: " + idArticle + " rating: " + rating + " text: " + text + " Product: " + Product + " User: " + User + " time: " + time;
+        }
     }
 }

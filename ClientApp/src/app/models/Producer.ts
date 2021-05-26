@@ -4,7 +4,7 @@ export class Producer{
     public idProducer?: number;
     public name?: string;
     public Products?: Product[];
-    public Country: Country
+    public Country?: Country
 
     constructor(params: Producer = {} as Producer){
         let{
@@ -13,6 +13,7 @@ export class Producer{
             Products = [],
             Country = undefined
         } = params;
+        this.idProducer = idProducer;
         this.name = name;
         this.Products = Products;
         this.Country = Country;

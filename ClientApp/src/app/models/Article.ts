@@ -20,6 +20,7 @@ export class Article{
             Product = undefined,
             User = undefined
         } = params;
+        this.idArticle = idArticle;
         this.rating = rating;
         this.text = text;
         this.time = time;

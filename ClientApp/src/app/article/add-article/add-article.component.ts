@@ -2,25 +2,30 @@ import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { MatAutocompleteActivatedEvent, MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatOptionSelectionChange } from '@angular/material/core';
+import { Router } from '@angular/router';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
-import { merge, Observable, OperatorFunction, Subject } from 'rxjs';
+import { from, merge, Observable, OperatorFunction, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { DataService } from 'src/app/data.service';
+import {ArticleAddDto} from 'src/app/interfaces/articleAddDto'
+import { Article } from 'src/app/models/Article';
+import { Atribute } from 'src/app/models/Atribute';
 import { AtributesGroup } from 'src/app/models/AtributesGroup';
 import { AtributeValue } from 'src/app/models/AtributeValue';
 import { Country } from 'src/app/models/Country';
 import { GroupType } from 'src/app/models/GroupTypes';
 import { Producer } from 'src/app/models/Producer';
 import { Product } from 'src/app/models/Product';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-add-article',
   templateUrl: './add-article.component.html',
-  styleUrls: ['./add-article.component.css','./add-article.component.scss']
+  styleUrls: ['./add-article.component.css','./add-article.component.scss'],
+  providers: [DataService]
 })
 export class AddArticleComponent implements OnInit {
   public addArticleForm: FormGroup;
-  matControl = new FormControl();
   options: any[];
   filteredOptions: Observable<any[]>;
 
@@ -32,16 +37,21 @@ export class AddArticleComponent implements OnInit {
   public products: Product[];
   public groups: Array<GroupType>;
   public categories: AtributesGroup[];
+  public atributes: Atribute[];
   public producers: Producer[];
   public countries: Country[];
 
   public isNewProduct:boolean = true;
+  public isNewProducer:boolean=true;
+  public isNewCountry:boolean=true;
   public selectedProduct: Product;
   public selectedGroup: GroupType;
   public selectedCategory: AtributesGroup;
+  public selectedAtributes: AtributeValue[] = [];
   public selectedProducer: Producer;
   public selectedCountry: Country;
   public selectedRate: number = 0;
+  public selectedText: string;
   
   productFormControl = new FormControl('', [Validators.required,]);
   groupFormControl = new FormControl('', [Validators.required,]);
@@ -50,7 +60,7 @@ export class AddArticleComponent implements OnInit {
   producerFormControl = new FormControl('', [Validators.required,]);
   countryFormControl = new FormControl('', [Validators.required,]);
 
-  constructor(private dataService: DataService) { 
+  constructor(private dataService: DataService, private router: Router) { 
   }
 
   ngOnInit(): void {
@@ -91,23 +101,57 @@ export class AddArticleComponent implements OnInit {
     return this.addArticleForm.controls[controlName].hasError(errorName)
   }  
 
-  public addArticle = (addArticleFormValue) =>{
+  public addArticle=async ()=>{
+    var article: Article = new Article();
 
+    for(let i = 0; i < this.selectedAtributes.length;i++){
+      //this.selectedAtributes[i].Atribute = this.atributes[i];
+      this.selectedAtributes[i].idAtribute = this.atributes[i].idAtribute;
+      this.selectedAtributes[i].Parent = this.selectedAtributes[i-1];
+      //this.selectedAtributes[i].Childrens.push(this.selectedAtributes[i+1])
+      //this.selectedAtributes[i].Product = this.selectedProduct;
+    }
+    if(this.isNewProduct){     
+      if(this.isNewProducer){
+        this.selectedProducer.Country = this.selectedCountry;    
+        //this.selectedProducer = (await this.dataService.createProducer(this.selectedProducer));
+          
+      }
+
+      this.selectedProduct.Producer = this.selectedProducer;
+      this.selectedProduct.AtributeValues = this.selectedAtributes;
+      //this.selectedProduct.Articles =[];
+    }
+
+    //this.selectedProduct.Articles.push(article);
+
+    article.Product = this.selectedProduct;
+    article.rating = this.selectedRate;
+    article.text = this.selectedText;
+    article.time = new Date();
+    article.User = JSON.parse(localStorage.getItem("user")) as User;
+    const atricleDto: ArticleAddDto ={
+      article: article
+    };
+    this.dataService.createArticle(atricleDto).subscribe(data => this.router.navigateByUrl("/"));
+    //this.selectedProduct.Articles.push(article);
+    //(await this.dataService.createProduct(this.selectedProduct));
   }
 
   //смена группы
   changeGroup(e) {
     this.selectedGroup = this.groupFormControl.value;
+    this.dataService.getAtributesGroupsOf(this.selectedGroup.idGroupType).subscribe((data: Array<AtributesGroup>) => this.categories = data);
   }
   
   //смена категории
-  changeCategory(e) {
-    console.log(this.atrFormControl);
+  async changeCategory(e) {
+    this.selectedCategory = this.categoryFormControl.value;
+    this.atributes = (await this.dataService.getAtributesOf(this.selectedCategory.idAtrbutesGroup) as Atribute[]);
     this.atrFormControl.length = 0;
-    for(let i = 0; i<this.categoryFormControl.value.atributes.length;i++){
+    for(let i = 0; i < this.atributes.length; i++){
       this.atrFormControl.push(new FormControl('', [Validators.required,]));
     }    
-    this.selectedCategory = this.categoryFormControl.value;
   }
 
   //получить соответсвующий валидатор для autocerect атрибута
@@ -153,24 +197,17 @@ export class AddArticleComponent implements OnInit {
 
   //фильтр занчений autocorrect
   public _filter(value: string): any[]{
-    try{      
-      if (this.nowSelectName == "AtributeValue") {
-        return this.options.filter(option => option.value.toLowerCase().indexOf(value) === 0);
-      }
-      else if(this.nowSelectName == "Product"){
-        return this.options.filter(option => option.name.toLowerCase().indexOf(value) === 0);
-      }
-      else if(this.nowSelectName == "Group"){
-        return this.options.filter(option => option.name.toLowerCase().indexOf(value) === 0);
-      }
-      else if(this.nowSelectName == "Producer"){
-        return this.options.filter(option => option.name.toLowerCase().indexOf(value) === 0);
-      }
-      else if(this.nowSelectName == "Country"){
-        return this.options.filter(option => option.name.toLowerCase().indexOf(value) === 0);
-      }
-      else{
-        return this.options.filter(option => option.toLowerCase().indexOf(value) === 0);
+    try{
+      switch(this.nowSelectName){
+        case "Product":  
+        case "Group":
+        case "Producer":
+        case "Country": 
+          return this.options.filter(option => option.name.toLowerCase().indexOf(value) === 0);       
+        case "AtributeValue":
+          return this.options.filter(option => option.value.toLowerCase().indexOf(value) === 0);
+        default:
+          return this.options.filter(option => option.toLowerCase().indexOf(value) === 0);
       }
     }
     catch(e){
@@ -178,15 +215,30 @@ export class AddArticleComponent implements OnInit {
   }
 
   //выбор, начало ввода в autocorrect
-  selectionMade(data:any, name:string) {
+  selectionMade(data:any, name:string, i?:number) {
     this.options = data;
     this.nowSelectName = name;
-    console.log("Select "+this.nowSelectName);
-    this.filteredOptions = this.matControl.valueChanges.pipe(
+    var matControl: FormControl;
+    switch(name){
+      case 'Product':
+          matControl = this.producerFormControl;
+        break;
+      case 'Producer':
+        matControl = this.producerFormControl;
+        break;
+      case 'Country':      
+        matControl = this.countryFormControl;
+        break;  
+      case 'AtributeValue':
+        matControl = this.atrFormControl[i];
+        break;
+      default:
+        return;
+    }
+    this.filteredOptions = matControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))      
     );
-    //this.filteredOptions.forEach(t=>console.log(t));
   }
 
   //проверка соответсвия типа массив
@@ -208,21 +260,22 @@ export class AddArticleComponent implements OnInit {
   }
 
   //изменение, но не выбор значения autocorrect
-  changed(){
-    console.log("Change "+this.nowSelectName);
-    switch(this.nowSelectName){
-      case "Product":  
-          this.groupFormControl.reset();
-          this.categoryFormControl.reset();
-          this.selectedGroup = undefined;
-          this.selectedCategory = undefined;
+  changed(name, index?:number){
+    switch(name){
+      case 'Product':
           this.isNewProduct = true;
           this.selectedProduct = new Product({name:this.productFormControl.value});
         break;
-      case "Group":
-      case "Producer":
-      case "Country":        
-      case "AtributeValue":
+      case 'Producer':
+        this.isNewProducer = true;
+        this.selectedProducer = new Producer({name:this.producerFormControl.value});
+        break;
+      case 'Country':      
+        this.isNewCountry = true;
+        this.selectedCountry = new Country({name:this.countryFormControl.value});
+        break;  
+      case 'AtributeValue':
+        this.selectedAtributes[index] = new AtributeValue({Atribute: this.selectedCategory.atributes[index],value:this.atrFormControl[index].value});
         break;
       default:
         return;
@@ -230,27 +283,23 @@ export class AddArticleComponent implements OnInit {
   }
 
   //выбор опции из autocorrect
-  optionSelected(value){
-    console.log("Select value "+this.nowSelectName);
-    switch(this.nowSelectName){
-      case "Product":
-        if(value instanceof Product){    
+  optionSelected(value, name, index?:number){
+    switch(name){
+      case 'Product':  
           this.isNewProduct = false;
           this.selectedProduct = value;
-        }
         break;
-      case "Group":
-      case "Producer":
-        if(value instanceof Producer){    
+      case 'Producer':   
+          this.isNewProducer = false;
           this.selectedProducer = value;
-        }
         break;
-      case "Country":
-        if(value instanceof Country){    
+      case 'Country':  
+          this.isNewCountry = false;
           this.selectedCountry = value;
-        }
         break;
-      case "AtributeValue":
+      case 'AtributeValue':
+        this.selectedAtributes[index] = value;
+        break;
       default:
         return value;
     }

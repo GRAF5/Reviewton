@@ -459,20 +459,20 @@ namespace ProductsReviewsAngular.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                    b.HasData(
-                        new
-                        {
-                            Id = "e30df65e-1207-4720-9359-d5ce2da375cb",
-                            Nickname = "Graf",
-                            UserName = "23andrei12@gmail.com",
-                            NormalizedUserName = "23ANDREI12@GMAIL.COM",
-                            Email = "23andrei12@gmail.com",
-                            NormalizedEmail = "23ANDREI12@GMAIL.COM",
-                            EmailConfirmed = "False",
-                            PasswordHash = "AQAAAAEAACcQAAAAEE0slkOEZmMLWPRMG0WAeIgLzwuzmGGPtdjLf8euZDdVaCFFFW8gbkeLB46f+mdYfg==",
-                            SecurityStamp = "EZYLIOPQQ5KORPZMBHSUUZTYXLAOAQGO",
-                            ConcurrencyStamp = "d78931cf-bd82-445c-99e0-23f9c57827ab"
-                        });
+                    //b.HasData(
+                    //    new
+                    //    {
+                    //        Id = "e30df65e-1207-4720-9359-d5ce2da375cb",
+                    //        Nickname = "Graf",
+                    //        UserName = "23andrei12@gmail.com",
+                    //        NormalizedUserName = "23ANDREI12@GMAIL.COM",
+                    //        Email = "23andrei12@gmail.com",
+                    //        NormalizedEmail = "23ANDREI12@GMAIL.COM",
+                    //        EmailConfirmed = "False",
+                    //        PasswordHash = "AQAAAAEAACcQAAAAEE0slkOEZmMLWPRMG0WAeIgLzwuzmGGPtdjLf8euZDdVaCFFFW8gbkeLB46f+mdYfg==",
+                    //        SecurityStamp = "EZYLIOPQQ5KORPZMBHSUUZTYXLAOAQGO",
+                    //        ConcurrencyStamp = "d78931cf-bd82-445c-99e0-23f9c57827ab"
+                    //    });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

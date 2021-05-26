@@ -25,7 +25,7 @@ const appRoutes: Routes=[
       {path: '', component: GroupListComponent},
       {path: 'group', component: GroupAddOrEditComponent, canActivate: [AuthGuard]},
       {path: 'authentication', loadChildren: () => import('./authentication/authentication.module').then(m=> m.AuthenticationModule)},
-      {path: 'article', loadChildren:()=>import('./article/aricle.module').then(m=>m.ArticleModule)},
+      {path: 'article', loadChildren:()=>import('./article/aricle.module').then(m=>m.ArticleModule), canActivate: [AuthGuard]},
       {path: '**', redirectTo:'/'},
 ]
 

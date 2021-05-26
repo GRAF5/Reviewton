@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddArticleComponent } from './add-article/add-article.component';
 import { MaterialModule } from '../material/material.module';
+import { DataService } from '../data.service';
 
 
 
@@ -19,7 +20,8 @@ import { MaterialModule } from '../material/material.module';
     FormsModule,
     NgbModule,
     MaterialModule
-  ]
+  ],
+  providers: [DataService]
 })
 export class ArticleModule {
 

@@ -19,12 +19,12 @@
             <a class="nav-link"[routerLink]="['/authentication/login']">Вход</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"[routerLink]="['/authentication/register']">Регестрация</a>
+            <a class="nav-link"[routerLink]="['/authentication/register']">Регистрация</a>
           </li>
         </ul>
         <ul *ngIf='isUserAuthenticated' class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item">
-            <button class="btn btn-link" style="color: #00000080;" (click)="logout()">Выйти</button>
+            <button class="nav-link" (click)="logout()">Выйти</button>
           </li>
         </ul>
       </form>

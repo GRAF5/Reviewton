@@ -15,7 +15,7 @@ namespace ProductsReviewsAngular.Models
         //public virtual ICollection<Atribute> Atributes { get; set; }
         public virtual ICollection<AtributeValue> AtributeValues { get; set; }
         public virtual ICollection<Article> Articles { get; set; }
-
+        public virtual Producer Producer { get; set; }
         public HashSet<string> GetValuesSet()
         {
             HashSet<string> set = new HashSet<string>();
@@ -25,7 +25,6 @@ namespace ProductsReviewsAngular.Models
             }
             return set;
         }
-        public virtual Producer Producer { get; set; }
         //public List<ProductAtribute> ProductAtributes { get; set; } = new List<ProductAtribute>();
         //public Product(string n, GroupType groupType)
         //{

@@ -7,7 +7,7 @@ namespace ProductsReviewsAngular.Models
 {
     public class AtributeValue: IEqualityComparer<AtributeValue>
     {
-        public int idAtributeValue { get; set; }
+        //public int idAtributeValue { get; set; }
         public virtual AtributeValue Parent { get; set; }
         public virtual ICollection<AtributeValue> Childrens { get; set; }
         public int idAtribute { get; set; }
@@ -17,6 +17,7 @@ namespace ProductsReviewsAngular.Models
         public virtual Product Product { get; set; }
 
         public string value { get; set; }
+        
         public bool Equals(AtributeValue av1, AtributeValue av2)
         {
             return (av1.idAtribute == av2.idAtribute &&

@@ -15,18 +15,18 @@
                     matInput
                     [matAutocomplete]="autoProduct"
                     (click)="selectionMade(products, 'Product')"
-                    (change)="changed()">
+                    (change)="changed('Product')">
                 <mat-autocomplete 
                     id="productsInput"
                     autoActiveFirstOption
                     #autoProduct="matAutocomplete"
                     [displayWith]="displayProperty.bind(this)"
-                    (optionSelected)="optionSelected($event.option.value)">
+                    (optionSelected)="optionSelected($event.option.value, 'Product')">
                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                         {{option.name}}
                     </mat-option>
                 </mat-autocomplete>
-                <mat-error *ngIf="productFormControl.hasError('required')">
+                <mat-error *ngIf="productFormControl.invalid">
                     Выберите <strong>Продукт</strong>
                 </mat-error>
             </mat-form-field>
@@ -38,25 +38,25 @@
                             {{group.name}}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="groupFormControl.hasError('required')">
+                    <mat-error *ngIf="groupFormControl.invalid">
                         Выберите <strong>Группу</strong>
                     </mat-error> 
                 </mat-form-field>      
-                <div *ngIf="selectedGroup">
+                <div *ngIf="selectedGroup && categories.length != 0">
                     <mat-form-field>
                         <mat-label>Категория</mat-label> 
                         <mat-select (selectionChange)="changeCategory($event)" [formControl]="categoryFormControl">
-                            <mat-option *ngFor="let ag of selectedGroup.atributesGroups" [value]="ag">
+                            <mat-option *ngFor="let ag of categories" [value]="ag">
                                 {{ag.name}}
                             </mat-option>
                         </mat-select>
-                        <mat-error *ngIf="categoryFormControl.hasError('required')">
+                        <mat-error *ngIf="categoryFormControl.invalid">
                             Выберите <strong>Категорию</strong>
                         </mat-error> 
                     </mat-form-field>
                 </div>
                 <div *ngIf="selectedCategory">
-                    <div *ngFor="let atr of selectedCategory.atributes; index as i">
+                    <div *ngFor="let atr of atributes; index as i">
                         <mat-form-field>
                             <mat-label>{{atr.name}}</mat-label> 
                             <input 
@@ -66,17 +66,16 @@
                                 aria-label="Number"
                                 matInput
                                 [matAutocomplete]="autoAtributeValue"
-                                (click)="selectionMade(atr.AtributeValues, 'AtributeValue')"
-                                (change)="changed()">
+                                (click)="selectionMade(atr.atributeValues, 'AtributeValue',i)"
+                                (change)="changed('AtributeValue',i)">
                             <mat-autocomplete id={{atr.name}} autoActiveFirstOption #autoAtributeValue="matAutocomplete" 
                                 [displayWith]="displayProperty.bind(this)"
-                                (optionActivated)="optionActivated($event.option.value)"
-                                (optionSelected)="optionSelected($event.option.value)">
-                                    <mat-option *ngFor="let option of filteredOptions" [value]="option">
+                                (optionSelected)="optionSelected.bind($event.option.value,'AtributeValue',i)">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                         {{option.value}}
                                     </mat-option>
                             </mat-autocomplete>
-                            <mat-error *ngIf="isAtrControlAtHasError(i,'required')">
+                            <mat-error *ngIf="getAtrControlAt(i).invalid">
                                 Введите <strong>{{atr.name}}</strong>
                             </mat-error>
                         </mat-form-field>  
@@ -92,16 +91,16 @@
                             matInput
                             [matAutocomplete]="autoProducer"
                             (click)="selectionMade(producers, 'Producer')"
-                            (change)="changed()">
+                            (change)="changed('Producer')">
                         <mat-autocomplete id="producerInput"
                             autoActiveFirstOption #autoProducer="matAutocomplete"
                             [displayWith]="displayProperty.bind(this)"
-                            (optionSelected)="optionSelected($event.option.value)">
+                            (optionSelected)="optionSelected($event.option.value, 'Producer')">
                             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                 {{option.name}}
                             </mat-option>
                         </mat-autocomplete>
-                        <mat-error *ngIf="producerFormControl.hasError('required')">
+                        <mat-error *ngIf="producerFormControl.invalid">
                             Выберите <strong>производителя</strong>
                         </mat-error> 
                     </mat-form-field>                    
@@ -115,16 +114,16 @@
                             matInput
                             [matAutocomplete]="autoCountry"
                             (click)="selectionMade(countries, 'Country')"
-                            (change)="changed()">
+                            (change)="changed('Country')">
                         <mat-autocomplete id="countryInput"
                             autoActiveFirstOption #autoCountry="matAutocomplete"
                             [displayWith]="displayProperty.bind(this)"
-                            (optionSelected)="optionSelected($event.option.value)">
+                            (optionSelected)="optionSelected($event.option.value,'Country')">
                             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                 {{option.name}}
                             </mat-option>
                         </mat-autocomplete>
-                        <mat-error *ngIf="countryFormControl.hasError('required')">
+                        <mat-error *ngIf="countryFormControl.invalid">
                             Выберите <strong>Страну производителя</strong>
                         </mat-error> 
                     </mat-form-field>
@@ -142,12 +141,12 @@
                     </div> 
                 <mat-form-field class="example-full-width" >
                     <mat-label>Отзыв</mat-label> 
-                    <textarea class="form-control" matInput></textarea>
+                    <textarea id="articleText" class="form-control" matInput (input)="selectedText = $event.target.value"></textarea>
                 </mat-form-field>
                 <br>
                 <div>
                     <div>
-                        <button type="submit" class="btn btn-info" [disabled]="!isValid()">Добавить</button>
+                        <button type="submit" (click)="addArticle()" class="btn btn-info" [disabled]="!isValid()">Добавить</button>
                     </div>
                 </div>
         </form>

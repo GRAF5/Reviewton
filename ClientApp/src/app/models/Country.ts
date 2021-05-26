@@ -10,6 +10,7 @@ export class Country{
             name = undefined,
             Producers = []
         } = params;
+        this.idCountry = idCountry;
         this.name = name;
         this.Producers = Producers;
     }

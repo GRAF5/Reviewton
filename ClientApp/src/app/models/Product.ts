@@ -16,6 +16,7 @@ export class Product{
             Articles = [],
             Producer = undefined
         } = params;
+        this.idProduct = idProduct;
         this.name = name;
         this.AtributeValues = AtributeValues;
         this.Articles = Articles;

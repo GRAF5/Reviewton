@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +45,8 @@ namespace ProductsReviewsAngular
             });
 
             string connectionString = "Server=(localdb)\\mssqllocaldb;Database=ProductReviews;Trusted_Connection=True;";
-            services.AddDbContext<Models.AppContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
+            services.AddDbContext<Models.AppContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString)
+            .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)));
 
             object p = services.AddAutoMapper(typeof(Startup));
 
