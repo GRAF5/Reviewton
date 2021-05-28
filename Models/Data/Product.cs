@@ -9,6 +9,7 @@ namespace ProductsReviewsAngular.Models
     {
         public int idProduct { get; set; }
         public string name { get; set; }
+        public float rating {get; set; }
 
         //public int idGroupType { get; set; }
         //public GroupType GroupType { get; set; }

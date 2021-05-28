@@ -11,5 +11,6 @@ namespace ProductsReviewsAngular.DTO
         public bool IsAddingSuccessful { get; set; }
         //public Product product { get; set; }
         public Article article { get; set; }
+        public bool isNewProduct {get; set; }
     }
 }

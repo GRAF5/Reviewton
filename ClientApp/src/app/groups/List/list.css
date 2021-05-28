@@ -1,0 +1,58 @@
+.form-group-element{
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    display: block;
+    text-align: center;
+}
+.form-group-element:hover{
+    background-color: #ddd;
+    color: black;
+    cursor: pointer;
+}
+
+.breadcrumbs{
+    color: #0366d6;
+    margin-bottom: 10px;
+}
+.crumb{
+    padding: 0;
+    color: #0366d6;
+    display: inline-block;
+    border: none;
+    background-color: #ffffff;
+}
+.group-element-section:before,
+.group-element-section:after{
+    content:"";
+    display: table;
+}
+.group-element-section:after{
+    clear: both;
+}
+.group-element-section{
+    clear: both;    
+    *zoom: 1;
+    text-align: left;
+}
+section {
+    float: left;
+    width: 63%;
+}
+aside {
+    float: right;
+    width: 30%;
+    text-align: -moz-right;
+}
+.group-element-section .name{
+    text-align: left;
+}
+.group-element-section .rate{
+    text-align: right;
+}
+.group-element-section .comments{
+    text-align: left;
+}
+.group-element-section .time{
+    text-align: right;
+}

@@ -3,10 +3,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from 'src/app/data.service'
 import { GroupType } from 'src/app/models/GroupTypes';
 import { AtributesGroup } from 'src/app/models/AtributesGroup';
-import { Atribute } from '../models/Atribute';
+import { Atribute } from 'src/app/models/Atribute';
 @Component({
     templateUrl: './group-add-or-edit.component.html',
-    providers: [DataService]
+    providers: [DataService],
+    styleUrls: ['./group-add-or-edit.component.css']
 })
 export class GroupAddOrEditComponent implements OnInit {
     groupType: GroupType;                                        //изменяемая группа

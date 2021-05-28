@@ -1,0 +1,155 @@
+<div class="card">
+  <ng-template [ngIf]="isGroupChoise">
+    <div class="card-body">
+      <div class="breadcrumbs">        
+        <button class="crumb" (click)="modeSelect(1)">Поиск</button>->
+      </div>
+      <h1 class="card-title">Выберите группу товаров</h1>
+      <div *ngIf='isAdmin'>
+        <a routerLink="/group" class="nav-link">Добавить</a>
+      </div>
+      <div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-xl-4" *ngFor="let group of groupTypes; let index = index">
+                <div class="form-group-element" (click)="selectGroup(group)">
+                  <h3>{{group.name}}</h3>
+                  <div *ngIf='isAdmin'>
+                    <button (click)="change(group)" class="btn btn-sm btn-primary">Изменить</button>
+                    <button (click)="delete(group)" class="btn btn-sm btn-danger">Удалить</button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="isCategoriesChoise">
+    <div class="card-body">
+      <div class="breadcrumbs">        
+        <button class="crumb" (click)="modeSelect(1)">Поиск</button>->
+        <button class="crumb" (click)="modeSelect(1)">{{selectedGroupName}}</button>->
+      </div>
+      <h1 class="card-title">Выберите категорию</h1>
+      <div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-xl-4" *ngFor="let category of categories; let index = index">
+                <div class="form-group-element" (click)="selectCategory(category)">
+                  <h3>{{category.name}}</h3>
+                </div>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="isAtributeValueChoise">
+    <div class="card-body">
+      <div class="breadcrumbs">        
+        <button class="crumb" (click)="modeSelect(1)">Поиск</button>->
+        <button class="crumb" (click)="modeSelect(1)">{{selectedGroupName}}</button>->
+        <button class="crumb" (click)="modeSelect(2)">{{selectedCategoryName}}</button>->
+        <ng-template ngFor let-av [ngForOf]="selectedAV" let-avNum="index">
+          <button class="crumb" (click)="modeSelect(3,avNum)">{{av.value}}</button>->
+        </ng-template>
+      </div>
+      <h1 class="card-title">Выберите {{atributeName}}</h1>
+      <div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-xl-4" *ngFor="let av of atributeValues; let index = index">
+                <div class="form-group-element" (click)="selectAV(av)">
+                  <h3>{{av.value}}</h3>
+                </div>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="isProductChoise">
+    <div class="card-body">
+      <div class="breadcrumbs">        
+        <button class="crumb" (click)="modeSelect(1)">Поиск</button>->
+        <button class="crumb" (click)="modeSelect(1)">{{selectedGroupName}}</button>->
+        <button class="crumb" (click)="modeSelect(2)">{{selectedCategoryName}}</button>->
+        <ng-template ngFor let-av [ngForOf]="selectedAV" let-avNum="index">
+          <button class="crumb" (click)="modeSelect(3,avNum)">{{av.value}}</button>->
+        </ng-template>
+      </div>
+      <h1 class="card-title">Подходящие продукты</h1>
+      <div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-xl-4" *ngFor="let pr of products; let index = index">
+                <div class="form-group-element" (click)="selectProduct(pr)">
+                  <h3>{{pr.name}}</h3>                  
+                  <div class="star-ratings-css">
+                    <div class="star-ratings-css-top" [ngStyle]="{'width.%': calcRate(pr.rating)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                    <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="isArticleChoise">
+    <div class="card-body">
+      <div class="breadcrumbs">        
+        <button class="crumb" (click)="modeSelect(1)">Поиск</button>->
+        <button class="crumb" (click)="modeSelect(1)">{{selectedGroupName}}</button>->
+        <button class="crumb" (click)="modeSelect(2)">{{selectedCategoryName}}</button>->
+        <ng-template ngFor let-av [ngForOf]="selectedAV" let-avNum="index">
+          <button class="crumb" (click)="modeSelect(3,avNum)">{{av.value}}</button>->
+        </ng-template>
+        <button class="crumb" (click)="modeSelect(4)">{{selectedProductName}}</button>->
+      </div>
+      <div>
+        <div class="group-element-section">
+          <section>
+            <h1 class="name">Рецензии для {{selectedProductName}}</h1>
+          </section>
+          <aside>
+            <p class="rate-number">{{selectedProduct.rating}}</p>
+            <div class="star-ratings-css" style="margin-right: 0;">
+              <div class="star-ratings-css-top" [ngStyle]="{'width.%': calcRate(selectedProduct.rating)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+              <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div>
+        <div *ngFor="let art of articles; let index = index">
+            <div class="form-group-element" (click)="selectAV(av)">
+              <div class="group-element-section">
+                <section>
+                  <p class="name">{{art.user.nickname}}</p>
+                </section>
+                <aside>
+                  <div class="star-ratings-css" style="margin-right: 0;">
+                    <div class="star-ratings-css-top" [ngStyle]="{'width.%': calcRate(art.rating)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                    <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                  </div>
+                </aside>
+              </div>
+              <div class="group-element-section">
+                <p class="text">{{art.text}}</p>
+              </div>
+              <div class="group-element-section">
+                <section>
+                  <a class="comments">Комментарии({{art.comments?.length}})</a>
+                </section>
+                <aside>
+                  <p class="time">{{art.time | date:'short'}}</p>
+                </aside>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

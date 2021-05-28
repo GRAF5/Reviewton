@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="ProductsReviewsAngular.Models.Atribute">
+    <Position X="8.75" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAQIAAABAAAAAAAAEAAAEAAAAQAAAAAA=</HashCode>
+      <FileName>Models\Data\Atributes\Atribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.AtributesGroup">
+    <Position X="1" Y="2.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAEAAAAAAAAAAAEAAAEAAAAgIAAAAA=</HashCode>
+      <FileName>Models\Data\Atributes\AtributesGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.AtributeValue" BaseTypeListCollapsed="true">
+    <Position X="1" Y="5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>gAACAAgAAAAAEAAAgAAEQAAAAAAAAKAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Data\Atributes\AtributeValue.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.Country">
+    <Position X="12.75" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Data\Atributes\Country.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.GroupType" BaseTypeListCollapsed="true">
+    <Position X="1" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAgAAAAAEAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Data\Atributes\GroupType.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.Producer">
+    <Position X="5" Y="2.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAIEAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Models\Data\Atributes\Producer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.User">
+    <Position X="8.75" Y="2.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Models\Data\Users\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.AppContext">
+    <Position X="4.75" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>gAAAACAIAAAAAAMAAABAAQAAEAAQAAAAAAAAAAAAIAQ=</HashCode>
+      <FileName>Models\Data\AppContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.Article">
+    <Position X="8.75" Y="4.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAEAAAAAAAAAQAAAAAMAAAAAAAAIAA=</HashCode>
+      <FileName>Models\Data\Article.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.Comment">
+    <Position X="12.75" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAgAAAAAAAAAEQAAAAAMAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Data\Comment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.Models.Product">
+    <Position X="4.75" Y="4.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAEAAAAABAAAAAgQAUAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Data\Product.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

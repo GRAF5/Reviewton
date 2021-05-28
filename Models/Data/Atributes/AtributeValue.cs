@@ -8,13 +8,13 @@ namespace ProductsReviewsAngular.Models
     public class AtributeValue: IEqualityComparer<AtributeValue>
     {
         //public int idAtributeValue { get; set; }
-        public virtual AtributeValue Parent { get; set; }
-        public virtual ICollection<AtributeValue> Childrens { get; set; }
+        public virtual AtributeValue parent { get; set; }
+        public virtual ICollection<AtributeValue> childrens { get; set; }
         public int idAtribute { get; set; }
-        public virtual Atribute Atribute { get; set; }
+        public virtual Atribute atribute { get; set; }
 
         public int idProduct { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual Product product { get; set; }
 
         public string value { get; set; }
         

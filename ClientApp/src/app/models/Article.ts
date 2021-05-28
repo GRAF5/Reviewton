@@ -6,9 +6,9 @@ export class Article{
     public rating: number;
     public text: string;
     public time: Date;
-    public Product?: Product;
-    public User?: User;
-    public Comments?: Comment[];
+    public product?: Product;
+    public user?: User;
+    public comments?: Comment[];
 
     constructor(params: Article = {} as Article){
         let{
@@ -16,16 +16,16 @@ export class Article{
             rating = undefined,
             text = undefined,
             time = undefined,
-            Comments = [],
-            Product = undefined,
-            User = undefined
+            comments = [],
+            product = undefined,
+            user = undefined
         } = params;
         this.idArticle = idArticle;
         this.rating = rating;
         this.text = text;
         this.time = time;
-        this.Comments = Comments;
-        this.Product = Product;
-        this.User = User;
+        this.comments = comments;
+        this.product = product;
+        this.user = user;
     }
 }

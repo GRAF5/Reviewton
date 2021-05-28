@@ -21,8 +21,7 @@ namespace ProductsReviewsAngular.Models
         public DbSet<Country> Countries { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        //public DbSet<Alcohol> Alcohols { get; set; }
-        //public DbSet<AlcoholCharacteristics> AlcoholCharacteristics { get; set; }
+
         public AppContext(DbContextOptions<AppContext> options):base(options)
         {
             Database.EnsureCreated();
@@ -34,35 +33,30 @@ namespace ProductsReviewsAngular.Models
             modelBuilder.Entity<Product>().HasKey(k => k.idProduct);            
             modelBuilder.Entity<Product>()
             .HasMany(ag => ag.AtributeValues)
-            .WithOne(atr => atr.Product).OnDelete(DeleteBehavior.NoAction);   
+            .WithOne(atr => atr.product).OnDelete(DeleteBehavior.NoAction);   
             modelBuilder.Entity<Product>()
             .HasMany(art => art.Articles)
-            .WithOne(atr => atr.Product).OnDelete(DeleteBehavior.Cascade);
+            .WithOne(atr => atr.product).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<GroupType>().HasKey(k => k.idGroupType);
             modelBuilder.Entity<GroupType>()
             .HasMany(ag => ag.atributesGroups)
             .WithOne(gt => gt.GroupType).OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<GroupType>().HasMany(ag => ag.atributesGroups).WithOne(gt => gt.GroupType).HasForeignKey(k => k.idGroupType);
-            //modelBuilder.Entity<GroupType>().HasMany(p => p.Products).WithOne(gt => gt.GroupType).HasForeignKey(k => k.idGroupType);
             modelBuilder.Entity<AtributesGroup>().HasKey(k => k.idAtrbutesGroup);
             modelBuilder.Entity<AtributesGroup>()
             .HasMany(ag => ag.atributes)
             .WithOne(atr => atr.AtributesGroup).OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<AtributesGroup>().HasMany(a => a.atributes).WithOne(ag => ag.AtributesGroup).HasForeignKey(k => k.idAtrbutesGroup);
-            modelBuilder.Entity<Atribute>().HasKey(k => k.idAtribute);
+             modelBuilder.Entity<Atribute>().HasKey(k => k.idAtribute);
             modelBuilder.Entity<Atribute>()
             .HasMany(ag => ag.AtributeValues)
-            .WithOne(atr => atr.Atribute).OnDelete(DeleteBehavior.Cascade);
+            .WithOne(atr => atr.atribute).OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<Atribute>().HasMany(av => av.AtributeValues).WithOne(a => a.Atribute).HasForeignKey(k => k.idAtribute);
-            //modelBuilder.Entity<AtributeValue>().HasKey(k => k.idAtributeValue);
             modelBuilder.Entity<AtributeValue>().HasKey(k => new{k.idAtribute, k.value});
             modelBuilder.Entity<AtributeValue>()
-            .HasMany(ag => ag.Childrens)
-            .WithOne(atr => atr.Parent).OnDelete(DeleteBehavior.NoAction);
+            .HasMany(ag => ag.childrens)
+            .WithOne(atr => atr.parent).OnDelete(DeleteBehavior.NoAction);
             
             modelBuilder.Entity<Country>().HasKey(k => k.idCountry);
             modelBuilder.Entity<Country>()
@@ -76,7 +70,7 @@ namespace ProductsReviewsAngular.Models
 
             modelBuilder.Entity<Article>().HasKey(k => k.idArticle);    
             modelBuilder.Entity<Article>()
-            .HasMany(com => com.Comments)
+            .HasMany(com => com.comments)
             .WithOne(art => art.Article).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Comment>().HasKey(k => new { k.idComment, k.idArticle, k.idUser });
@@ -87,53 +81,7 @@ namespace ProductsReviewsAngular.Models
             .WithOne(u => u.User).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<User>()
             .HasMany(art => art.Articles)
-            .WithOne(u => u.User).OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder
-            //    .Entity<Product>()
-            //    .HasMany(c => c.Atributes)
-            //    .WithMany(s => s.Products)
-            //    .UsingEntity<AtributeValue>(
-            //        pa =>
-            //        pa.HasOne(p => p.Atribute)
-            //        .WithMany(av => av.AtributeValues)
-            //        .HasForeignKey(p => p.idAtribute),
-            //        pa =>
-            //        pa.HasOne(av => av.Product)
-            //        .WithMany(p => p.AtributeValues)
-            //        .HasForeignKey(av => av.idProduct),
-            //        pa =>
-            //        {
-            //            pa.Property(v => v.value).HasDefaultValue("value");
-            //            pa.HasKey(k => new { k.idAtribute, k.idProduct });
-            //            pa.ToTable("AtributeValue");
-            //        }
-            //    );
-
-            //modelBuilder.Entity<Alcohol>()
-            //    .HasKey(k => k._alcID);
-            //modelBuilder.Entity<AlcoholCharacteristics>()
-            //    .HasKey(k => k.id);
-
-            //modelBuilder
-            //    .Entity<Alcohol>()
-            //    .HasMany(c => c._alcoholCharacteristics)
-            //    .WithMany(s => s._alcohols)
-            //    .UsingEntity<AlcoholCharacteristicValue>(
-            //        acv =>
-            //        acv.HasOne(pt => pt._AlcoholCharacteristics)
-            //        .WithMany(t => t._alcoholCharacteristicValues)
-            //        .HasForeignKey(pt => pt._alcCharacteristicID),
-            //        acv =>
-            //        acv.HasOne(pt => pt._Alcohol)
-            //       .WithMany(p => p._alcoholCharacteristicValues)
-            //      .HasForeignKey(pt => pt._alcID),
-            //        j =>
-            //        {
-            //            j.Property(pt => pt._value);
-            //            j.HasKey(t => new { t._alcID, t._alcCharacteristicID });
-            //            j.ToTable("AlcoholCharacteristicValue");
-            //        });
+            .WithOne(u => u.user).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

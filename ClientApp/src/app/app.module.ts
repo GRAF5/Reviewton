@@ -10,8 +10,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import {GroupListComponent} from './groups/group-list.component';
-import {GroupAddOrEditComponent} from './groups/group-add-or-edit.component';
 
 import {DataService} from './data.service';
 import {RouterExtService} from './router.ext.service';
@@ -20,6 +18,8 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatLineModule } from '@angular/material/core';
 import { MaterialModule } from './material/material.module';
+import { GroupListComponent } from './groups/List/group-list.component';
+import { GroupAddOrEditComponent } from './groups/Group-Add-Update/group-add-or-edit.component';
 
 const appRoutes: Routes=[
       {path: '', component: GroupListComponent},

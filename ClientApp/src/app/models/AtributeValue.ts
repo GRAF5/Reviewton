@@ -4,32 +4,32 @@ import { Product } from "./Product";
 export class AtributeValue{
     public idAtributeValue?: number;
     public idAtribute?: number;
-    public Parent?: AtributeValue;
-    public Childrens?: AtributeValue[];
-    public Atribute?: Atribute;
+    public parent?: AtributeValue;
+    public childrens?: AtributeValue[];
+    public atribute?: Atribute;
     public idProduct?: number;
-    public Product?: Product;
+    public product?: Product;
     public value?: string;
 
     constructor(params: AtributeValue = {} as AtributeValue){
         let{
             idAtributeValue = undefined,
             idAtribute = undefined,
-            Parent = undefined,
-            Childrens = [],
-            Atribute = undefined,
+            parent = undefined,
+            childrens = [],
+            atribute = undefined,
             idProduct = undefined,
-            Product = undefined,
+            product = undefined,
             value = undefined
         } = params;
         
         this.idAtributeValue = idAtributeValue;
         this.idAtribute = idAtribute;
-        this.Parent = Parent;
-        this.Childrens = Childrens;
-        this.Atribute = Atribute;
+        this.parent = parent;
+        this.childrens = childrens;
+        this.atribute = atribute;
         this.idProduct = idProduct;
-        this.Product = Product;
+        this.product = product;
         this.value = value;
     }
 }

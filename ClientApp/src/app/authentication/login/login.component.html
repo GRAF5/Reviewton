@@ -9,18 +9,18 @@
                 <label for="email" class="col-form-label col-sm-2">Email:</label>
                 <div class="col-md-5">
                     <input type="text" id="email" formControlName="email" class="form-control" />
-                </div>
-                <div class="col-md-5">
-                    <em *ngIf="validateControl('email') && hasError('email', 'required')">Введите Email</em>
+                    <div class="col-md-5">
+                        <em *ngIf="validateControl('email') && hasError('email', 'required')">Введите Email</em>
+                    </div>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="password" class="col-form-label col-sm-2">Password:</label>
                 <div class="col-md-5">
                     <input type="password" id="password" formControlName="password" class="form-control" />
-                </div>
-                <div class="col-md-5">
-                    <em *ngIf="validateControl('password') && hasError('password', 'required')">Введите пароль</em>
+                    <div class="col-md-5">
+                        <em *ngIf="validateControl('password') && hasError('password', 'required')">Введите пароль</em>
+                    </div>
                 </div>
             </div>
             <!--

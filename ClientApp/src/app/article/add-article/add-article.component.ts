@@ -105,43 +105,37 @@ export class AddArticleComponent implements OnInit {
     var article: Article = new Article();
 
     for(let i = 0; i < this.selectedAtributes.length;i++){
-      //this.selectedAtributes[i].Atribute = this.atributes[i];
       this.selectedAtributes[i].idAtribute = this.atributes[i].idAtribute;
-      this.selectedAtributes[i].Parent = this.selectedAtributes[i-1];
-      //this.selectedAtributes[i].Childrens.push(this.selectedAtributes[i+1])
-      //this.selectedAtributes[i].Product = this.selectedProduct;
+      this.selectedAtributes[i].parent = this.selectedAtributes[i-1];
     }
     if(this.isNewProduct){     
       if(this.isNewProducer){
         this.selectedProducer.Country = this.selectedCountry;    
-        //this.selectedProducer = (await this.dataService.createProducer(this.selectedProducer));
-          
       }
 
       this.selectedProduct.Producer = this.selectedProducer;
       this.selectedProduct.AtributeValues = this.selectedAtributes;
-      //this.selectedProduct.Articles =[];
+      this.selectedProduct.rating = this.selectedRate;
     }
-
-    //this.selectedProduct.Articles.push(article);
-
-    article.Product = this.selectedProduct;
+    article.product = this.selectedProduct;
     article.rating = this.selectedRate;
     article.text = this.selectedText;
     article.time = new Date();
-    article.User = JSON.parse(localStorage.getItem("user")) as User;
+    article.user = JSON.parse(localStorage.getItem("user")) as User;
     const atricleDto: ArticleAddDto ={
-      article: article
+      article: article,
+      isNewProduct: this.isNewProduct
     };
+    console.log(atricleDto);
     this.dataService.createArticle(atricleDto).subscribe(data => this.router.navigateByUrl("/"));
     //this.selectedProduct.Articles.push(article);
     //(await this.dataService.createProduct(this.selectedProduct));
   }
 
   //смена группы
-  changeGroup(e) {
+  async changeGroup(e) {
     this.selectedGroup = this.groupFormControl.value;
-    this.dataService.getAtributesGroupsOf(this.selectedGroup.idGroupType).subscribe((data: Array<AtributesGroup>) => this.categories = data);
+    this.categories = (await this.dataService.getAtributesGroupsOf(this.selectedGroup.idGroupType) as AtributesGroup[]) //.subscribe((data: Array<AtributesGroup>) => this.categories = data);
   }
   
   //смена категории
@@ -275,7 +269,7 @@ export class AddArticleComponent implements OnInit {
         this.selectedCountry = new Country({name:this.countryFormControl.value});
         break;  
       case 'AtributeValue':
-        this.selectedAtributes[index] = new AtributeValue({Atribute: this.selectedCategory.atributes[index],value:this.atrFormControl[index].value});
+        this.selectedAtributes[index] = new AtributeValue({atribute: this.selectedCategory.atributes[index],value:this.atrFormControl[index].value});
         break;
       default:
         return;

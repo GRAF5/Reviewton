@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="ProductsReviewsAngular.DTO.ArticleAddDto">
+    <Position X="4.5" Y="2.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAABIAAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\ArticleAddDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.DTO.AuthResponseDto">
+    <Position X="1.75" Y="0.75" Width="2.5" />
+    <NestedTypes>
+      <Class Name="ProductsReviewsAngular.DTO.AuthResponseDto.User" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DTO\AuthResponseDto.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAQA=</HashCode>
+      <FileName>DTO\AuthResponseDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.DTO.RegistrationResponseDto">
+    <Position X="7.5" Y="0.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\RegistrationResponseDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.DTO.UserForAuthenticationDto">
+    <Position X="1.75" Y="3" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\UserForAuthenticationDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProductsReviewsAngular.DTO.UserForRegistrationDto">
+    <Position X="4.5" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAQAAAAAAAACAAAAAAAAIAA=</HashCode>
+      <FileName>DTO\UserForRegistrationDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

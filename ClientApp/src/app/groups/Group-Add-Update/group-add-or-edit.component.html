@@ -18,14 +18,17 @@
         </td>
     </tr>
     </table>
-    <button class="btn btn-sm btn-primary" (click)="startEditAtributeGroup(atributesGroup)">Добавить категорию</button>
+    <div>
+      <button class="btn btn-sm btn-primary" (click)="startEditAtributeGroup(atributesGroup)">Добавить категорию</button>
+    </div>
     <div class="form-group">
-      <input type="button" value="Сохранить" (click)="saveGroup()" class="btn btn-success" />
+      <button class="btn btn-success" (click)="saveGroup()">Сохранить</button>
   </div>
 </div>
 
 <!--шаблон для редактирования Категории<-->
 <ng-template #editORCreateCategory>
+  <h2>Редактирование категории</h2>
   <label>Имя</label>
   <input type="text" [(ngModel)]="editableAtributesGroup.name" class="form-control" />
   
@@ -40,11 +43,15 @@
           </td>
         </ng-template>
       </tr>
-      <input type="text" [(ngModel)]="newAtributeName" class="form-control" />
-      <input type="button" class="btn btn-success"  value="Добавить" (click)="addAtribute()"/>
+      <div>
+        <input type="text" [(ngModel)]="newAtributeName" class="form-control" />
+        <button class="btn btn-success" (click)="addAtribute()">Добавить атрибут</button>
+      </div>
   </table>
-  <input type="button" class="btn btn-success"  value="Готово" (click)="saveAtributesGroup()"/>
-  <input type="button" value="Отмена" (click)="cancelAtributesGroup()" class="btn btn-sm btn-warning" />
+  <div>
+    <button class="btn btn-success" (click)="saveAtributesGroup()">Готово</button>
+    <button class="btn btn-sm btn-warning" (click)="cancelAtributesGroup()">Отмена</button>
+  </div>
 </ng-template>
 
 
@@ -53,7 +60,9 @@
     <input type="text" [(ngModel)]="changeAtributeName" class="form-control" />
   </td>
   <td>
-    <input type="button" value="Сохранить" (click)="saveAtribute()" class="btn btn-sm btn-success" />
-    <input type="button" value="Отмена" (click)="cancelAtribute()" class="btn btn-sm btn-warning" />
+    <div>
+      <button class="btn btn-success" (click)="saveAtribute()">Готово</button>
+      <button class="btn btn-sm btn-warning" (click)="cancelAtribute()">Отмена</button>
+    </div>
   </td>
 </ng-template>
