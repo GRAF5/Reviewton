@@ -10,7 +10,7 @@
     <input type="text" [(ngModel)]="groupType.name" class="form-control" />
     <table class="table table-striped">
       <label>Категории</label>
-      <tr *ngFor="let ag of groupType.atributesGroups">
+      <tr *ngFor="let ag of allAtributesGroup">
         <td>{{ag?.name}}</td>
         <td>
           <button class="btn btn-sm btn-primary" (click)="startEditAtributeGroup(ag)">Изменить</button>

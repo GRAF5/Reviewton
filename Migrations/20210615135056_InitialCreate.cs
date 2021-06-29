@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProductsReviewsAngular.Migrations
 {
-    public partial class InitialRoleSeed : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,7 +26,7 @@ namespace ProductsReviewsAngular.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Nickname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nickname = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -53,7 +53,7 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     idCountry = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,7 +66,7 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     idGroupType = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -185,7 +185,7 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     idProducer = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     CountryidCountry = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -196,7 +196,7 @@ namespace ProductsReviewsAngular.Migrations
                         column: x => x.CountryidCountry,
                         principalTable: "Countries",
                         principalColumn: "idCountry",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,7 +205,7 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     idAtrbutesGroup = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     idGroupType = table.Column<int>(type: "int", nullable: false),
                     GroupTypeidGroupType = table.Column<int>(type: "int", nullable: true)
                 },
@@ -226,7 +226,8 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     idProduct = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    rating = table.Column<float>(type: "real", nullable: false),
                     ProduceridProducer = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -237,7 +238,7 @@ namespace ProductsReviewsAngular.Migrations
                         column: x => x.ProduceridProducer,
                         principalTable: "Producers",
                         principalColumn: "idProducer",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -246,8 +247,9 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     idAtribute = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     isEnable = table.Column<bool>(type: "bit", nullable: false),
+                    isCanBeMany = table.Column<bool>(type: "bit", nullable: false),
                     idAtrbutesGroup = table.Column<int>(type: "int", nullable: false),
                     AtributesGroupidAtrbutesGroup = table.Column<int>(type: "int", nullable: true)
                 },
@@ -270,60 +272,57 @@ namespace ProductsReviewsAngular.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     rating = table.Column<int>(type: "int", nullable: false),
                     text = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProductidProduct = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    productidProduct = table.Column<int>(type: "int", nullable: true),
+                    userId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     time = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Articles", x => x.idArticle);
                     table.ForeignKey(
-                        name: "FK_Articles_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Articles_AspNetUsers_userId",
+                        column: x => x.userId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Articles_Products_ProductidProduct",
-                        column: x => x.ProductidProduct,
+                        name: "FK_Articles_Products_productidProduct",
+                        column: x => x.productidProduct,
                         principalTable: "Products",
                         principalColumn: "idProduct",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AtributeValues",
                 columns: table => new
                 {
-                    idAtributeValue = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentidAtributeValue = table.Column<int>(type: "int", nullable: true),
                     idAtribute = table.Column<int>(type: "int", nullable: false),
-                    AtributeidAtribute = table.Column<int>(type: "int", nullable: true),
+                    value = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    parentidAtribute = table.Column<int>(type: "int", nullable: true),
+                    parentvalue = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     idProduct = table.Column<int>(type: "int", nullable: false),
-                    ProductidProduct = table.Column<int>(type: "int", nullable: true),
-                    value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    productidProduct = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AtributeValues", x => x.idAtributeValue);
+                    table.PrimaryKey("PK_AtributeValues", x => new { x.idAtribute, x.value });
                     table.ForeignKey(
-                        name: "FK_AtributeValues_Atributes_AtributeidAtribute",
-                        column: x => x.AtributeidAtribute,
+                        name: "FK_AtributeValues_Atributes_idAtribute",
+                        column: x => x.idAtribute,
                         principalTable: "Atributes",
                         principalColumn: "idAtribute",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AtributeValues_AtributeValues_ParentidAtributeValue",
-                        column: x => x.ParentidAtributeValue,
+                        name: "FK_AtributeValues_AtributeValues_parentidAtribute_parentvalue",
+                        columns: x => new { x.parentidAtribute, x.parentvalue },
                         principalTable: "AtributeValues",
-                        principalColumn: "idAtributeValue");
+                        principalColumns: new[] { "idAtribute", "value" });
                     table.ForeignKey(
-                        name: "FK_AtributeValues_Products_ProductidProduct",
-                        column: x => x.ProductidProduct,
+                        name: "FK_AtributeValues_Products_productidProduct",
+                        column: x => x.productidProduct,
                         principalTable: "Products",
-                        principalColumn: "idProduct",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "idProduct");
                 });
 
             migrationBuilder.CreateTable(
@@ -333,7 +332,6 @@ namespace ProductsReviewsAngular.Migrations
                     idComment = table.Column<int>(type: "int", nullable: false),
                     idArticle = table.Column<int>(type: "int", nullable: false),
                     idUser = table.Column<int>(type: "int", nullable: false),
-                    ArticleidArticle = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     text = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -341,38 +339,36 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     table.PrimaryKey("PK_Comments", x => new { x.idComment, x.idArticle, x.idUser });
                     table.ForeignKey(
-                        name: "FK_Comments_Articles_ArticleidArticle",
-                        column: x => x.ArticleidArticle,
+                        name: "FK_Comments_Articles_idArticle",
+                        column: x => x.idArticle,
                         principalTable: "Articles",
-                        principalColumn: "idArticle",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "idArticle");
                     table.ForeignKey(
                         name: "FK_Comments_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a0b09882-cbbb-4082-a4cb-bbe294aed376", "aeabec33-03c0-4eb8-b212-798b1ef77efa", "User", "USER" });
+                values: new object[] { "e934ae81-e326-4ef8-8fa1-b97e368e90be", "c82f0f0b-8b0b-4ab9-ab04-c635061a1b73", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f57ce44a-c3fc-4f4d-a38e-3b59f2fe466d", "b4273398-0b8b-49c5-ba99-5c054206580b", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "a52b939f-92d8-44db-969d-52cebd044fc6", "3f4c6f9f-317d-4c89-b993-1fd50e9a99fd", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articles_ProductidProduct",
+                name: "IX_Articles_productidProduct",
                 table: "Articles",
-                column: "ProductidProduct");
+                column: "productidProduct");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Articles_UserId",
+                name: "IX_Articles_userId",
                 table: "Articles",
-                column: "UserId");
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -424,24 +420,19 @@ namespace ProductsReviewsAngular.Migrations
                 column: "GroupTypeidGroupType");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AtributeValues_AtributeidAtribute",
+                name: "IX_AtributeValues_parentidAtribute_parentvalue",
                 table: "AtributeValues",
-                column: "AtributeidAtribute");
+                columns: new[] { "parentidAtribute", "parentvalue" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AtributeValues_ParentidAtributeValue",
+                name: "IX_AtributeValues_productidProduct",
                 table: "AtributeValues",
-                column: "ParentidAtributeValue");
+                column: "productidProduct");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AtributeValues_ProductidProduct",
-                table: "AtributeValues",
-                column: "ProductidProduct");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_ArticleidArticle",
+                name: "IX_Comments_idArticle",
                 table: "Comments",
-                column: "ArticleidArticle");
+                column: "idArticle");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",

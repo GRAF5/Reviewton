@@ -10,10 +10,12 @@ namespace ProductsReviewsAngular.Models
     {
         [Display(Name = "№ Категории")]
         public int idAtrbutesGroup { get; set; }
+
         [Required(ErrorMessage = "Введите название категории")]
         [Display(Name = "Название категории")]
+        [ConcurrencyCheck]
+        [MaxLength(50)]
         public string name { get; set; }
-        //public int idGroupType { get; set; }
         public virtual int idGroupType { get; set; }
         public virtual GroupType GroupType { get; set; }
 
@@ -31,11 +33,5 @@ namespace ProductsReviewsAngular.Models
                 return "id: " + idAtrbutesGroup + " name: " + name + " AtributeCount: " + atributes.Count() + " GroupTypeID:" +idGroupType;
             }
         }
-        //public AtributesGroup(string n, GroupType groupType)
-        //{
-        //    name = n;
-        //    GroupType = groupType;
-        //    idGroupType = groupType.idGroupType;
-        //}
     }
 }

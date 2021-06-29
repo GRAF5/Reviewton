@@ -11,6 +11,7 @@ import { Atribute } from 'src/app/models/Atribute';
 })
 export class GroupAddOrEditComponent implements OnInit {
     groupType: GroupType;                                        //изменяемая группа
+    allAtributesGroup: AtributesGroup[];
     atributesGroup: AtributesGroup = new AtributesGroup();     //изменяемая категория  
     editableAtributesGroup: AtributesGroup = new AtributesGroup();   
     atribute: Atribute;                                          //изменяемый атрибут
@@ -27,17 +28,20 @@ export class GroupAddOrEditComponent implements OnInit {
     }
 
     // получаем данные через сервис
-    loadProducts() {  
+    async loadProducts() {  
         if(history.state.data != undefined){
             this.newGroup = false;
-        this.groupType = history.state.data.groupType;
-        }else{
+            this.groupType = history.state.data.groupType;
+            this.allAtributesGroup = (await this.dataService.getAtributesGroupsOf(this.groupType.idGroupType) as AtributesGroup[]);
+        }
+        else{
             this.newGroup = true;
             this.groupType = new GroupType([]);
         }
     }
     // сохранение данных
     saveGroup() {
+        this.groupType.atributesGroups = this.allAtributesGroup;
         if(this.newGroup){
             this.dataService.createGroupTypes(this.groupType).subscribe(data => this.router.navigateByUrl("/"));
         }else{
@@ -52,11 +56,11 @@ export class GroupAddOrEditComponent implements OnInit {
         this.editGroup = false;
     }
     saveAtributesGroup(){
-        var n = this.groupType.atributesGroups.indexOf(this.atributesGroup);
+        var n = this.allAtributesGroup.indexOf(this.atributesGroup);
         if(n == -1){
-            this.groupType.atributesGroups.push(this.editableAtributesGroup);
+            this.allAtributesGroup.push(this.editableAtributesGroup);
         }else{
-            this.groupType.atributesGroups[n] = this.editableAtributesGroup;
+            this.allAtributesGroup[n] = this.editableAtributesGroup;
         }
         this.editGroup = true;
         this.atributesGroup = new AtributesGroup();
@@ -68,7 +72,7 @@ export class GroupAddOrEditComponent implements OnInit {
         this.atributesGroup = new AtributesGroup();
     }
     deleteAtributeGroup(ag: AtributesGroup){
-        this.groupType.atributesGroups.splice(this.groupType.atributesGroups.indexOf(ag),1);
+        this.allAtributesGroup.splice(this.allAtributesGroup.indexOf(ag),1);
     }
     addAtribute(){
         this.editableAtributesGroup.atributes.push(new Atribute({name:this.newAtributeName}));

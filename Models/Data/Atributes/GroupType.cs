@@ -14,6 +14,8 @@ namespace ProductsReviewsAngular.Models
 
         [Required(ErrorMessage = "Введите название группы")]
         [Display(Name = "Название группы")]
+        [ConcurrencyCheck]
+        [MaxLength(50)]
         public string name { get; set; }
 
         [Display(Name = "Созданные категории")]

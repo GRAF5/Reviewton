@@ -6,6 +6,7 @@ using ProductsReviewsAngular.Interfaces;
 using ProductsReviewsAngular.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,8 +17,8 @@ namespace ProductsReviewsAngular.Controllers
     public class DataController : Controller
     {
 
-        Models.AppContext db;
-        public DataController(Models.AppContext context)
+        Models.ApplicationContext db;
+        public DataController(Models.ApplicationContext context)
         {
             db = context;
         }
@@ -46,14 +47,13 @@ namespace ProductsReviewsAngular.Controllers
         [HttpGet("GroupType")]
         public IEnumerable<GroupType> GetAllGroupType()
         {
-            return db.GroupTypes.ToList();
+            return db.GroupTypes.AsNoTracking().ToList();
         }
 
         [Authorize(Roles = "Administrator")]
         [HttpPost("GroupType")]
         public IActionResult PostGroupType(GroupType data)
         {
-            Console.WriteLine(data);
             if (ModelState.IsValid)
             {
                 db.GroupTypes.Add(data);
@@ -97,7 +97,7 @@ namespace ProductsReviewsAngular.Controllers
         [HttpGet("AtributeValues/{id}/{value}")]
         public IEnumerable<AtributeValue> GetAtributeValuesChildrens(int id, string value)
         {
-            return db.AtributeValues.FirstOrDefault(x=>x.atribute.idAtribute==id && string.Equals(x.value, value)).childrens.ToList();
+            return db.AtributeValues.AsNoTracking().FirstOrDefault(x=>x.atribute.idAtribute==id && string.Equals(x.value, value)).childrens.ToList();
         }
 
         [HttpGet("Product")]
@@ -110,7 +110,7 @@ namespace ProductsReviewsAngular.Controllers
         [HttpPost("Product/Filter")]
         public IEnumerable<Product> GetFilteredProducts([FromBody]FilterProductDto data)
         {
-            List<Product> prods = db.Products.ToList();
+            List<Product> prods = db.Products.AsNoTracking().ToList();
             foreach(var av in data.selectedAV){
                 prods = prods.Where(pr => pr.AtributeValues.Any(a => a.idAtribute == av.idAtribute && string.Equals(a.value,av.value))).ToList();
             }
@@ -142,7 +142,6 @@ namespace ProductsReviewsAngular.Controllers
         [HttpPost("Producer")]
         public async Task<IActionResult> PostProducer(Producer data)
         {
-            Console.WriteLine(data);
             if (ModelState.IsValid)
             {
                 await db.Producers.AddAsync(data);
@@ -182,24 +181,73 @@ namespace ProductsReviewsAngular.Controllers
         public async Task<IActionResult> PostArticle([FromBody]ArticleAddDto data)
         {
             data.article.user = db.Users.Find(data.article.user.Id);
-            if(data.isNewProduct){
-                Console.WriteLine("Add Av");
+
+            //проверка продукта на существование
+            data.article.product.normalizedName = NormalizeString(data.article.product.name);
+            Product product = db.Products.FirstOrDefault(pr => string.Equals(pr.normalizedName, data.article.product.normalizedName));
+            if(product == null)
+            {
+                data.article.product.name = data.article.product.name.Trim();
+                data.isNewProduct = true;
+
+                data.article.product.Producer.normalizedName = NormalizeString(data.article.product.Producer.name);
+                Producer producer = db.Producers.FirstOrDefault(pr => string.Equals(pr.normalizedName, data.article.product.Producer.normalizedName));
+                if (producer == null)
+                {
+                    data.article.product.Producer.name = data.article.product.Producer.name.Trim();
+
+
+                    data.article.product.Producer.Country.normalizedName = NormalizeString(data.article.product.Producer.Country.name);
+                    Country country = db.Countries.FirstOrDefault(co => string.Equals(co.normalizedName, data.article.product.Producer.Country.normalizedName));
+                    if (country == null)
+                    {
+                        data.article.product.Producer.Country.name = data.article.product.Producer.Country.name.Trim();
+                    }
+                    else
+                    {
+                        data.article.product.Producer.Country = country;
+                    }
+                }
+                else
+                {
+                    data.article.product.Producer = producer;
+                }
+            }
+            else
+            {
+                data.isNewProduct = false;
+                data.article.product = product;
+            }
+
+            if (data.isNewProduct)
+            {
                 var AtrVList = data.article.product.AtributeValues.ToList();
-                for(int i =0; i<AtrVList.Count; i++){
-                    Console.WriteLine(AtrVList[i].idAtribute +" " + AtrVList[i].value);
-                    AtrVList[i].atribute = db.Atributes.FirstOrDefault(atr=>atr.idAtribute == AtrVList[i].idAtribute);
-                    if(i<AtrVList.Count-1){
-                        AtrVList[i].childrens.Add(AtrVList[i + 1]);
+
+                for(int i =0; i<AtrVList.Count; i++)
+                {
+
+                    AtrVList[i].atribute = db.Atributes.FirstOrDefault(atr => atr.idAtribute == AtrVList[i].idAtribute);
+
+                    //проверка значения на существование
+                    AtrVList[i].normalizedValue = NormalizeString(AtrVList[i].value);
+                    AtributeValue atributeValue = db.AtributeValues.FirstOrDefault(av => av.idAtribute == AtrVList[i].idAtribute && string.Equals(av.normalizedValue, AtrVList[i].normalizedValue));
+                    if(atributeValue != null)
+                    {
+                        AtrVList[i] = atributeValue;
+                    }
+                    else
+                    {
+                        AtrVList[i].value = AtrVList[i].value.Trim();
+                        if (i > 0)
+                        {
+                            AtrVList[i].parent = AtrVList[i - 1];
+                        }
+                        db.AtributeValues.Add(AtrVList[i]);
                     }
                 }        
-                db.AtributeValues.Add(data.article.product.AtributeValues.ToList()[0]);
                 await db.SaveChangesAsync();
+
             }
-            else{
-                Console.WriteLine("Find Product");
-                data.article.product = db.Products.Find(data.article.product.idProduct);
-            }
-            Console.WriteLine("Add Article");
             if (ModelState.IsValid)
             {
                 await db.Articles.AddAsync(data.article);
@@ -212,8 +260,17 @@ namespace ProductsReviewsAngular.Controllers
             return BadRequest(ModelState);
         }
 
+        public static string NormalizeString(string str)
+        {
+            string[] stringToReplace = { "*"," ", "'" };
+            foreach (string st in stringToReplace)
+            {
+               str = str.Replace(st, "");
+            }
+            return str.Normalize().ToUpper();
+        }
+
         private void UpdateProduct(int ProdID){
-            Console.WriteLine("Update Product");
             float rate = 0;
             int sum = 0;
 

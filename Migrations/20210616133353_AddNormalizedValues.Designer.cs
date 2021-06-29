@@ -9,9 +9,9 @@ using ProductsReviewsAngular.Models;
 
 namespace ProductsReviewsAngular.Migrations
 {
-    [DbContext(typeof(Models.AppContext))]
-    [Migration("20210418191136_InitialRoleSeed")]
-    partial class InitialRoleSeed
+    [DbContext(typeof(ApplicationContext))]
+    [Migration("20210616133353_AddNormalizedValues")]
+    partial class AddNormalizedValues
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,15 +50,15 @@ namespace ProductsReviewsAngular.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a0b09882-cbbb-4082-a4cb-bbe294aed376",
-                            ConcurrencyStamp = "aeabec33-03c0-4eb8-b212-798b1ef77efa",
+                            Id = "7388fa66-f81b-45d4-9808-90552dbcb349",
+                            ConcurrencyStamp = "b420037d-8cae-416e-a21a-bda6ae07d4c0",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "f57ce44a-c3fc-4f4d-a38e-3b59f2fe466d",
-                            ConcurrencyStamp = "b4273398-0b8b-49c5-ba99-5c054206580b",
+                            Id = "2a3d10b4-50cb-467f-8369-4dfa11cdd14e",
+                            ConcurrencyStamp = "c6956859-19b6-4d92-8f44-d10b9edd0c44",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -175,11 +175,8 @@ namespace ProductsReviewsAngular.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ProductidProduct")
+                    b.Property<int?>("productidProduct")
                         .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("rating")
                         .HasColumnType("int");
@@ -190,11 +187,14 @@ namespace ProductsReviewsAngular.Migrations
                     b.Property<DateTime>("time")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("idArticle");
 
-                    b.HasIndex("ProductidProduct");
+                    b.HasIndex("productidProduct");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("userId");
 
                     b.ToTable("Articles");
                 });
@@ -212,11 +212,16 @@ namespace ProductsReviewsAngular.Migrations
                     b.Property<int>("idAtrbutesGroup")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isCanBeMany")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("isEnable")
                         .HasColumnType("bit");
 
                     b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("idAtribute");
 
@@ -227,36 +232,34 @@ namespace ProductsReviewsAngular.Migrations
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.AtributeValue", b =>
                 {
-                    b.Property<int>("idAtributeValue")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AtributeidAtribute")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ParentidAtributeValue")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductidProduct")
-                        .HasColumnType("int");
-
                     b.Property<int>("idAtribute")
                         .HasColumnType("int");
+
+                    b.Property<string>("normalizedValue")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("idProduct")
                         .HasColumnType("int");
 
+                    b.Property<int?>("parentidAtribute")
+                        .HasColumnType("int");
+
+                    b.Property<string>("parentnormalizedValue")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("productidProduct")
+                        .HasColumnType("int");
+
                     b.Property<string>("value")
-                        .HasColumnType("nvarchar(max)");
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("idAtributeValue");
+                    b.HasKey("idAtribute", "normalizedValue");
 
-                    b.HasIndex("AtributeidAtribute");
+                    b.HasIndex("productidProduct");
 
-                    b.HasIndex("ParentidAtributeValue");
-
-                    b.HasIndex("ProductidProduct");
+                    b.HasIndex("parentidAtribute", "parentnormalizedValue");
 
                     b.ToTable("AtributeValues");
                 });
@@ -275,8 +278,10 @@ namespace ProductsReviewsAngular.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("name")
+                        .IsConcurrencyToken()
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("idAtrbutesGroup");
 
@@ -296,9 +301,6 @@ namespace ProductsReviewsAngular.Migrations
                     b.Property<int>("idUser")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ArticleidArticle")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -307,9 +309,9 @@ namespace ProductsReviewsAngular.Migrations
 
                     b.HasKey("idComment", "idArticle", "idUser");
 
-                    b.HasIndex("ArticleidArticle");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("idArticle");
 
                     b.ToTable("Comments");
                 });
@@ -322,7 +324,9 @@ namespace ProductsReviewsAngular.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("idCountry");
 
@@ -337,8 +341,10 @@ namespace ProductsReviewsAngular.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("name")
+                        .IsConcurrencyToken()
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("idGroupType");
 
@@ -356,7 +362,9 @@ namespace ProductsReviewsAngular.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("idProducer");
 
@@ -376,7 +384,15 @@ namespace ProductsReviewsAngular.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("name")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("normalizedName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("rating")
+                        .HasColumnType("real");
 
                     b.HasKey("idProduct");
 
@@ -411,7 +427,8 @@ namespace ProductsReviewsAngular.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Nickname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -506,17 +523,19 @@ namespace ProductsReviewsAngular.Migrations
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.Article", b =>
                 {
-                    b.HasOne("ProductsReviewsAngular.Models.Product", "Product")
+                    b.HasOne("ProductsReviewsAngular.Models.Product", "product")
                         .WithMany("Articles")
-                        .HasForeignKey("ProductidProduct");
+                        .HasForeignKey("productidProduct")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ProductsReviewsAngular.Models.User", "User")
+                    b.HasOne("ProductsReviewsAngular.Models.User", "user")
                         .WithMany("Articles")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("Product");
+                    b.Navigation("product");
 
-                    b.Navigation("User");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.Atribute", b =>
@@ -531,25 +550,27 @@ namespace ProductsReviewsAngular.Migrations
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.AtributeValue", b =>
                 {
-                    b.HasOne("ProductsReviewsAngular.Models.Atribute", "Atribute")
+                    b.HasOne("ProductsReviewsAngular.Models.Atribute", "atribute")
                         .WithMany("AtributeValues")
-                        .HasForeignKey("AtributeidAtribute")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("idAtribute")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ProductsReviewsAngular.Models.AtributeValue", "Parent")
-                        .WithMany("Childrens")
-                        .HasForeignKey("ParentidAtributeValue")
+                    b.HasOne("ProductsReviewsAngular.Models.Product", "product")
+                        .WithMany("AtributeValues")
+                        .HasForeignKey("productidProduct")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("ProductsReviewsAngular.Models.Product", "Product")
-                        .WithMany("AtributeValues")
-                        .HasForeignKey("ProductidProduct");
+                    b.HasOne("ProductsReviewsAngular.Models.AtributeValue", "parent")
+                        .WithMany("childrens")
+                        .HasForeignKey("parentidAtribute", "parentnormalizedValue")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("Atribute");
+                    b.Navigation("atribute");
 
-                    b.Navigation("Parent");
+                    b.Navigation("parent");
 
-                    b.Navigation("Product");
+                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.AtributesGroup", b =>
@@ -564,13 +585,16 @@ namespace ProductsReviewsAngular.Migrations
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.Comment", b =>
                 {
-                    b.HasOne("ProductsReviewsAngular.Models.Article", "Article")
-                        .WithMany("Comments")
-                        .HasForeignKey("ArticleidArticle");
-
                     b.HasOne("ProductsReviewsAngular.Models.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("ProductsReviewsAngular.Models.Article", "Article")
+                        .WithMany("comments")
+                        .HasForeignKey("idArticle")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Article");
 
@@ -581,7 +605,8 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     b.HasOne("ProductsReviewsAngular.Models.Country", "Country")
                         .WithMany("Producers")
-                        .HasForeignKey("CountryidCountry");
+                        .HasForeignKey("CountryidCountry")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Country");
                 });
@@ -590,14 +615,15 @@ namespace ProductsReviewsAngular.Migrations
                 {
                     b.HasOne("ProductsReviewsAngular.Models.Producer", "Producer")
                         .WithMany("Products")
-                        .HasForeignKey("ProduceridProducer");
+                        .HasForeignKey("ProduceridProducer")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Producer");
                 });
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.Article", b =>
                 {
-                    b.Navigation("Comments");
+                    b.Navigation("comments");
                 });
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.Atribute", b =>
@@ -607,7 +633,7 @@ namespace ProductsReviewsAngular.Migrations
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.AtributeValue", b =>
                 {
-                    b.Navigation("Childrens");
+                    b.Navigation("childrens");
                 });
 
             modelBuilder.Entity("ProductsReviewsAngular.Models.AtributesGroup", b =>

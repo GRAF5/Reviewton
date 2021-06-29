@@ -9,7 +9,7 @@ using ProductsReviewsAngular.Models.Configurations;
 
 namespace ProductsReviewsAngular.Models
 {
-    public class AppContext : IdentityDbContext<User>
+    public class ApplicationContext : IdentityDbContext<User>
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<GroupType> GroupTypes { get; set; }
@@ -22,18 +22,18 @@ namespace ProductsReviewsAngular.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
-        public AppContext(DbContextOptions<AppContext> options):base(options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options):base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
-            modelBuilder.Entity<Product>().HasKey(k => k.idProduct);            
+            modelBuilder.Entity<Product>().HasKey(k => k.idProduct);
             modelBuilder.Entity<Product>()
             .HasMany(ag => ag.AtributeValues)
-            .WithOne(atr => atr.product).OnDelete(DeleteBehavior.NoAction);   
+            .WithOne(atr => atr.product).OnDelete(DeleteBehavior.Cascade);   
             modelBuilder.Entity<Product>()
             .HasMany(art => art.Articles)
             .WithOne(atr => atr.product).OnDelete(DeleteBehavior.Cascade);
@@ -53,7 +53,7 @@ namespace ProductsReviewsAngular.Models
             .HasMany(ag => ag.AtributeValues)
             .WithOne(atr => atr.atribute).OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<AtributeValue>().HasKey(k => new{k.idAtribute, k.value});
+            modelBuilder.Entity<AtributeValue>().HasKey(k => new{k.idAtribute, k.normalizedValue});
             modelBuilder.Entity<AtributeValue>()
             .HasMany(ag => ag.childrens)
             .WithOne(atr => atr.parent).OnDelete(DeleteBehavior.NoAction);
@@ -82,6 +82,7 @@ namespace ProductsReviewsAngular.Models
             modelBuilder.Entity<User>()
             .HasMany(art => art.Articles)
             .WithOne(u => u.user).OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

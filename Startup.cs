@@ -44,8 +44,8 @@ namespace ProductsReviewsAngular
                 o.MemoryBufferThreshold = int.MaxValue;
             });
 
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=ProductReviews;Trusted_Connection=True;";
-            services.AddDbContext<Models.AppContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString)
+            string connectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            services.AddDbContext<Models.ApplicationContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString)
             .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning)));
 
             object p = services.AddAutoMapper(typeof(Startup));
@@ -58,7 +58,7 @@ namespace ProductsReviewsAngular
                 opts.Password.RequireDigit = false; // ��������� �� �����
                 opts.User.RequireUniqueEmail = true;
                 })
-                .AddEntityFrameworkStores<Models.AppContext>()
+                .AddEntityFrameworkStores<Models.ApplicationContext>()
                 .AddDefaultTokenProviders();
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
                 opt.TokenLifespan = TimeSpan.FromHours(2));

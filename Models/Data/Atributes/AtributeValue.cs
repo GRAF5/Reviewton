@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,7 +8,6 @@ namespace ProductsReviewsAngular.Models
 {
     public class AtributeValue: IEqualityComparer<AtributeValue>
     {
-        //public int idAtributeValue { get; set; }
         public virtual AtributeValue parent { get; set; }
         public virtual ICollection<AtributeValue> childrens { get; set; }
         public int idAtribute { get; set; }
@@ -16,7 +16,10 @@ namespace ProductsReviewsAngular.Models
         public int idProduct { get; set; }
         public virtual Product product { get; set; }
 
+        [ConcurrencyCheck]
+        [MaxLength(50)]
         public string value { get; set; }
+        public string normalizedValue { get; set; }
         
         public bool Equals(AtributeValue av1, AtributeValue av2)
         {
@@ -27,14 +30,5 @@ namespace ProductsReviewsAngular.Models
         {
             return (idAtribute + "|" + idProduct).GetHashCode();
         }
-        //public List<ProductAtribute> ProductAtributes { get; set; } = new List<ProductAtribute>();
-        //public List<Product> Products { get; set; } = new List<Product>();
-
-        //public AtributeValue(string v, Atribute atribute)
-        //{
-        //    value = v;
-        //    Atribute = atribute;
-        //    idAtribute = atribute.idAtribute;
-        //}
     }
 }
